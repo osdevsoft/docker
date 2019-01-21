@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+
+  web_server:
+    image: osds_web_server_image
+    build:
+      context: web_server
+    container_name: osds_web_server_container
+    volumes:
+      - "d:/www/osds/:/var/www/osds"
+    ports:
+      - "80:80"
+
+
+  php:
+    image: osds_php_image
+    build:
+        context: php
+    container_name: osds_php_container
+    volumes:
+      - "d:/www/osds/:/var/www/osds"
+
+
+  database:
+    image: mariadb
+    container_name: mariadb_container
+    restart: always
+    command:
+      "mysqld --innodb-flush-method=fsync"
+    env_file: database/.env
+    volumes:
+      - "./database/container_data:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+
+
+  adminer:
+    image: adminer
+    container_name: adminer_container
+    restart: always
+    ports:
+      - "8080:8080"
+
+#network to use
+networks:
+  osds:
