@@ -9,4 +9,4 @@ COPY hosts/ /etc/nginx/conf.d/
 
 COPY command.sh /tmp/command.sh
 RUN chmod +x /tmp/command.sh
-CMD /tmp/command.sh
+#CMD /tmp/command.sh
