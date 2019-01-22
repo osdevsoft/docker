@@ -8,7 +8,7 @@ services:
       context: web_server
     container_name: osds_web_server_container
     volumes:
-      - "../:/var/www/osds"
+      - "../code:/var/www/osds"
     ports:
       - "80:80"
 
@@ -19,7 +19,7 @@ services:
         context: php
     container_name: osds_php_container
     volumes:
-      - "../:/var/www/osds"
+      - "../code:/var/www/osds"
 
 
   database:
