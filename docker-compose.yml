@@ -8,7 +8,7 @@ services:
       context: web_server
     container_name: osds_web_server_container
     volumes:
-      - "../code:/var/www/osds"
+      - "../code:/var/www/osds:cached"
     ports:
       - "80:80"
 
@@ -19,7 +19,7 @@ services:
         context: php
     container_name: osds_php_container
     volumes:
-      - "../code:/var/www/osds"
+      - "../code:/var/www/osds:cached"
 
 
   database:
@@ -27,7 +27,7 @@ services:
     container_name: mariadb_container
     restart: always
     command:
-      "mysqld --innodb-flush-method=fsync"
+      "mysqld --innodb-flush-method=O_DSYNC --innodb-use-native-aio=0 --log_bin=ON"
     env_file: database/.env
     volumes:
       - "./database/container_data:/var/lib/mysql"
