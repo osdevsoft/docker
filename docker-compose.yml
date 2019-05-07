@@ -8,10 +8,11 @@ services:
       context: web_server
     container_name: osds_web_server_container
     volumes:
-      - "../code:/var/www/osds:cached"
+      - "../code:/var/www/osds"
     ports:
       - "80:80"
-
+    networks:
+      custom-network:
 
   php:
     image: osds_php_image
@@ -19,8 +20,10 @@ services:
         context: php
     container_name: osds_php_container
     volumes:
-      - "../code:/var/www/osds:cached"
-
+      - "../code:/var/www/osds"
+#      - "./php/conf/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf"
+    networks:
+      custom-network:
 
   database:
     image: mariadb
@@ -33,7 +36,8 @@ services:
       - "./database/container_data:/var/lib/mysql"
     ports:
       - "3306:3306"
-
+    networks:
+      custom-network:
 
   adminer:
     image: adminer
@@ -41,3 +45,63 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    networks:
+      custom-network:
+        aliases:
+          - "adminer.myproject.sandbox"
+
+  angular:
+    image: osds_angular_image
+    build:
+      context: angular
+    container_name: osds_angular_container
+    restart: always
+    volumes:
+      - "../code:/var/www/osds"
+    ports:
+      - "84:4200"
+    networks:
+      custom-network:
+        aliases:
+          - "backoffice.myproject.sandbox"
+
+
+  rabbitmq:
+    image: rabbitmq:3.7.14-management
+    container_name: osds_rabbitmq_container
+    environment:
+      - RABBITMQ_DEFAULT_HOST=/
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    volumes:
+      - "./rabbitmq/data:/var/lib/rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      custom-network:
+        aliases:
+          - "rabbitmq.myproject.sandbox"
+
+
+  elk:
+    build:
+      context: elk
+    image: osds_elk_image
+    container_name: osds_elk_container
+    volumes:
+      - "./data/elastic.store:/usr/share/elasticsearch/data"
+      - "./elk/logstash:/etc/logstash/conf.d"
+    ports:
+      - "5044:5044" #Server: logstash Beats Interface
+      - "9300:9300" #ES transport interface
+      - "9200:9200" #ADMIN: ES Json Interface
+      - "5601:5601" #ADMIN: kibana
+    networks:
+      custom-network:
+        aliases:
+          - "elk.myproject.sandbox"
+
+
+networks:
+  custom-network:

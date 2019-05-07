@@ -12,3 +12,15 @@ RUN printf '[PHP]\ndate.timezone = "Europe/Madrid"\n' > /usr/local/etc/php/conf.
 
 RUN apt-get update
 RUN docker-php-ext-install pdo pdo_mysql
+
+#rabbitmq
+RUN docker-php-ext-install sockets bcmath
+
+#supervisor for Message Queues
+RUN apt-get install -y supervisor
+#CMD ["/usr/bin/supervisord"]
+
+#Filebeat
+RUN curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.7.0-amd64.deb \
+    && dpkg -i filebeat-6.7.0-amd64.deb
+COPY conf/filebeat.yml /etc/filebeat/filebeat.yml
