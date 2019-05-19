@@ -21,7 +21,7 @@ services:
     container_name: osds_php_container
     volumes:
       - "../code:/var/www/osds"
-#      - "./php/conf/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf"
+      - "./php/conf/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf"
     networks:
       custom-network:
 
@@ -39,16 +39,16 @@ services:
     networks:
       custom-network:
 
-  adminer:
-    image: adminer
-    container_name: adminer_container
-    restart: always
-    ports:
-      - "8080:8080"
-    networks:
-      custom-network:
-        aliases:
-          - "adminer.myproject.sandbox"
+#  adminer:
+#    image: adminer
+#    container_name: adminer_container
+#    restart: always
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      custom-network:
+#        aliases:
+#          - "adminer.myproject.sandbox"
 
   angular:
     image: osds_angular_image
@@ -89,6 +89,8 @@ services:
       context: elk
     image: osds_elk_image
     container_name: osds_elk_container
+    environment:
+      - ES_CONNECT_RETRY=300
     volumes:
       - "./data/elastic.store:/usr/share/elasticsearch/data"
       - "./elk/logstash:/etc/logstash/conf.d"
