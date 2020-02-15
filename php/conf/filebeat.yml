@@ -25,9 +25,21 @@ filebeat.inputs:
 
     # Paths that should be crawled and fetched. Glob based paths.
     paths:
-      - /var/www/html/vitalrecords-api/storage/logs/laravel.log
+      - /var/www/osds/api/var/log/osds_api_dev.log
     fields: {
       log_type: api-framework
+    }
+
+  - type: log
+
+    # Change to true to enable this input configuration.
+    enabled: true
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    paths:
+      - /var/www/osds/api/var/log/rabbitmq.log
+    fields: {
+      log_type: rabbitmq
     }
 
       #  - type: log

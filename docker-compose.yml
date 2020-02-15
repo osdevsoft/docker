@@ -13,6 +13,12 @@ services:
       - "80:80"
     networks:
       custom-network:
+        aliases:
+          - "api.osdshub.sandbox"
+          - "backoffice.osdshub.sandbox"
+          - "template-blocks.osdshub.sandbox"
+          - "samplesite.sandbox"
+          - "backoffice.samplesite.sandbox"
 
   php:
     image: osds_php_image
@@ -48,62 +54,72 @@ services:
 #    networks:
 #      custom-network:
 #        aliases:
-#          - "adminer.myproject.sandbox"
-
-  angular:
-    image: osds_angular_image
-    build:
-      context: angular
-    container_name: osds_angular_container
-    restart: always
-    volumes:
-      - "../code:/var/www/osds"
-    ports:
-      - "84:4200"
-    networks:
-      custom-network:
-        aliases:
-          - "backoffice.myproject.sandbox"
+#          - "adminer.osdshub.sandbox"
 
 
-  rabbitmq:
-    image: rabbitmq:3.7.14-management
-    container_name: osds_rabbitmq_container
-    environment:
-      - RABBITMQ_DEFAULT_HOST=/
-      - RABBITMQ_DEFAULT_USER=rabbitmq
-      - RABBITMQ_DEFAULT_PASS=rabbitmq
-    volumes:
-      - "./rabbitmq/data:/var/lib/rabbitmq"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      custom-network:
-        aliases:
-          - "rabbitmq.myproject.sandbox"
+#  angular:
+#    image: osds_angular_image
+#    build:
+#      context: angular
+#    container_name: osds_angular_container
+#    restart: always
+#    volumes:
+#      - "../code:/var/www/osds"
+#    ports:
+#      - "84:4200"
+#    networks:
+#      custom-network:
+#        aliases:
+#          - "backoffice.osdshub.sandbox"
 
 
-  elk:
-    build:
-      context: elk
-    image: osds_elk_image
-    container_name: osds_elk_container
-    environment:
-      - ES_CONNECT_RETRY=300
-    volumes:
-      - "./data/elastic.store:/usr/share/elasticsearch/data"
-      - "./elk/logstash:/etc/logstash/conf.d"
-    ports:
-      - "5044:5044" #Server: logstash Beats Interface
-      - "9300:9300" #ES transport interface
-      - "9200:9200" #ADMIN: ES Json Interface
-      - "5601:5601" #ADMIN: kibana
-    networks:
-      custom-network:
-        aliases:
-          - "elk.myproject.sandbox"
+#  rabbitmq:
+#    image: rabbitmq:3.7.14-management
+#    container_name: osds_rabbitmq_container
+#    environment:
+#      - RABBITMQ_DEFAULT_HOST=/
+#      - RABBITMQ_DEFAULT_USER=rabbitmq
+#      - RABBITMQ_DEFAULT_PASS=rabbitmq
+#    volumes:
+#      - "./rabbitmq/data:/var/lib/rabbitmq"
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#    networks:
+#      custom-network:
+#        aliases:
+#          - "rabbitmq.osdshub.sandbox"
 
+
+#  elk:
+#    build:
+#      context: elk
+#    image: osds_elk_image
+#    container_name: osds_elk_container
+#    environment:
+#      - ES_CONNECT_RETRY=300
+#    volumes:
+#      - "./data/elastic.store:/usr/share/elasticsearch/data"
+#      - "./elk/logstash:/etc/logstash/conf.d"
+#    ports:
+#      - "5044:5044" #Server: logstash Beats Interface
+#      - "9300:9300" #ES transport interface
+#      - "9200:9200" #ADMIN: ES Json Interface
+#      - "5601:5601" #ADMIN: kibana
+#    networks:
+#      custom-network:
+#        aliases:
+#          - "elk.osdshub.sandbox"
+
+#  jenkins:
+#    image: jenkins/jenkins
+#    container_name: osds_jenkins_container
+#    ports:
+#      - "8088:8080"
+#    networks:
+#      custom-network:
+#        aliases:
+#          - "jenkins.osdshub.sandbox"
 
 networks:
   custom-network:

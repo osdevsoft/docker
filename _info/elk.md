@@ -1,0 +1,4 @@
+#filebeat
+
+filebeat -e (log)
+
